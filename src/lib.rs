@@ -1,5 +1,7 @@
 pub mod first;
+pub mod firstdotone;
 
+/// Adds two
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
 }
