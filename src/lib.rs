@@ -1,5 +1,5 @@
-// pub mod first;
-pub mod firstdotone;
+pub mod first;
+// pub mod firstdotone;
 
 /// Adds two
 pub fn add(left: u64, right: u64) -> u64 {
@@ -9,7 +9,7 @@ pub fn add(left: u64, right: u64) -> u64 {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::firstdotone::{List, Link};
+    use crate::first::{List, Link};
     
     #[test]
     fn it_works() {
@@ -20,7 +20,7 @@ mod test {
 
     #[test]
     fn testis (){
-        let mut list = List::new(&firstdotone::List{a: Link::Empty});
+        let mut list = List::new(&first::List{a: Link::Empty});
         assert_eq!(list.pop(), None);
 
         list.push(1);   
@@ -32,9 +32,4 @@ mod test {
         assert_eq!(list.pop(), None);
         
     }
-    
-    
-
-
-
 }
