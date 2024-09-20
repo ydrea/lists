@@ -1,12 +1,13 @@
-use std::mem;
-///List = Link:More(BoxNode) =+ Link:More(BoxNode) =+ Link:Empty
+///got took
+///List = Link Option(BoxNode) =+ Link Option(BoxNode) =+ None
 //init type List, first pointer...
 pub struct List {
  pub a: Link,
 }
-//...to either nothing, or something more...
-type Link=Option(Box<Node>);
-//...shaped like a Node, on the heap (Box).
+//...to Option...
+pub type Link = Option<Box<Node>>;
+
+//...shaped like a recursive Node, on the heap (Box).
 pub struct Node {
     car: i32,
     cdr: Link
@@ -22,7 +23,7 @@ impl List {
         let new_node = Box::new(Node {
             car,
             //temporarily replacing self.a with an empty Link 
-            cdr: mem::replace(&mut self.a, None),
+            cdr: self.a.take(),
         });
         //< returning self.a to be the new_node
         self.a = Some(new_node);
@@ -34,7 +35,7 @@ impl List {
         let result; 
         //mach on Option
         //+ replace, temporarily replacing self.a with None
-        match mem::replace(&mut self.a, None) {
+        match self.a.take() {
             None => {
                 result = None;
             },
@@ -48,13 +49,13 @@ impl List {
 }
 impl Drop for List {
     fn drop(&mut self) {
-        let mut drop_link = mem::replace(&mut self.a, None);
+        let mut drop_link = self.a.take();
         // while let == do this thing until this pattern stops matching
             // boxed_node goes out of scope and gets dropped here...
         while let Some(mut boxed_node) = drop_link {
 
 //  ...while Node next field = Link Empty.
-            drop_link = mem::replace(&mut boxed_node.cdr, None);
+            drop_link = boxed_node.cdr.take();
         } //so no unbounded recursion occurs
     }
 }

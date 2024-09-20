@@ -1,5 +1,5 @@
+pub mod second;
 pub mod first;
-// pub mod firstdotone;
 
 /// Adds two
 pub fn add(left: u64, right: u64) -> u64 {
@@ -9,18 +9,28 @@ pub fn add(left: u64, right: u64) -> u64 {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::first::{List, Link};
+    // use crate::first::{List, Link};
+    use crate::second::{List, Link};
     
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+
+    // #[test]
+    // fn testis (){
+    //     let mut list = List::new(&first::List{a: Link::Empty});
+    //     assert_eq!(list.pop(), None);
+
+    //     list.push(1);   
+    //     list.push(2);   
+    //     // list.push();   
+
+    //     assert_eq!(list.pop(), Some(2));
+    //     assert_eq!(list.pop(), Some(1));
+    //     assert_eq!(list.pop(), None);
+    //     }
 
 
     #[test]
-    fn testis (){
-        let mut list = List::new(&first::List{a: Link::Empty});
+    fn tester (){
+        let mut list = List::new(&second::List{a: None});
         assert_eq!(list.pop(), None);
 
         list.push(1);   
