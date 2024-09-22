@@ -13,12 +13,12 @@ pub struct Node<T> {
     cdr: Link<T>
 }
 ///Method - create an empty List
-impl List {
+impl<T> List<T> {
     pub fn new(&self) -> Self { 
         return List { a: None };   
     }
 //Associated fn - push a node to List
-    pub fn push(&mut self, car: i32) {
+    pub fn push(&mut self, car: T) {
  //make a new_node to be Box new(elem, next: self.a)
         let new_node = Box::new(Node {
             car,
@@ -28,26 +28,35 @@ impl List {
         //< returning self.a to be the new_node
         self.a = Some(new_node);
     }
-///pop a Node off the List
-///Option SomeT or None, to check for empty List
-    pub fn pop(&mut self) -> Option<i32> {
-        //init result to be returned
-        let result; 
-        //mach on Option
-        //+ replace, temporarily replacing self.a with None
-        match self.a.take() {
-            None => {
-                result = None;
-            },
-            Some(node) => {
-                result = Some(node.car);
-                self.a = node.cdr;
-            },
-        };
-        result
-    }
+///pop a Node off the List w map&closure
+pub fn pop(&mut self)->Option<T>{
+    self.a.take()//temporarily replacing self.a with None
+    
+    .map(|node|{
+
+        self.a = node.cdr;
+        node.car
+    })
 }
-impl Drop for List {
+// //Option SomeT or None, to check for empty List
+//     pub fn pop(&mut self) -> Option<T> {
+//         //init result to be returned
+//         let result; 
+//         //mach on Option
+//         //+ replace, temporarily replacing self.a with None
+//         match self.a.take() {
+//             None => {
+//                 result = None;
+//             },
+//             Some(b) => {
+//                 result = Some(b.car);
+//                 self.a = b.cdr;
+//             },
+//         };
+//         result
+//     }
+}
+impl<T> Drop for List<T> {
     fn drop(&mut self) {
         let mut drop_link = self.a.take();
         // while let == do this thing until this pattern stops matching
