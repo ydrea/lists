@@ -1,23 +1,23 @@
 ///got took
 ///List = Link Option(BoxNode) =+ Link Option(BoxNode) =+ None
 //init type List, first pointer...
-pub struct List {
- pub a: Link,
+pub struct List<T> {
+ pub a: Link<T>,
 }
 //...to Option...
-pub type Link = Option<Box<Node>>;
+pub type Link<T> = Option<Box<Node<T>>>;
 
 //...shaped like a recursive Node, on the heap (Box).
-pub struct Node {
-    car: i32,
-    cdr: Link
+pub struct Node<T> {
+    car: T,
+    cdr: Link<T>
 }
-///create an empty List
+///Method - create an empty List
 impl List {
     pub fn new(&self) -> Self { 
         return List { a: None };   
     }
-///push a node to List
+//Associated fn - push a node to List
     pub fn push(&mut self, car: i32) {
  //make a new_node to be Box new(elem, next: self.a)
         let new_node = Box::new(Node {
