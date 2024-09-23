@@ -1,5 +1,5 @@
-///got took
 ///List = Link Option(BoxNode) =+ Link Option(BoxNode) =+ None
+
 //init type List, first pointer...
 pub struct List<T> {
  pub a: Link<T>,
@@ -15,11 +15,11 @@ pub struct Node<T> {
 ///Method - create an empty List
 impl<T> List<T> {
     pub fn new() -> Self { 
-        List { a: None }   
+        return List { a: None };   
     }
 //Associated fn - push a node to List
     pub fn push(&mut self, car: T) {
- //make a new_node to be Box new(elem, next: self.a)
+ //make a new_node to be Box new(car, cdr: self.a)
         let new_node = Box::new(Node {
             car,
             //temporarily replacing self.a with an empty Link 
@@ -103,3 +103,22 @@ impl<T> Drop for List<T> {
         } //so no unbounded recursion occurs
     }
 }
+
+
+pub struct IntoIter<T>(List<T>);
+
+
+impl<T> List<T> {
+    pub fn into_iter(self) -> IntoIter<T> {
+        IntoIter(self)
+    }
+}
+
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        // access fields of a tuple struct numerically
+        self.0.pop()
+    }
+}
+
