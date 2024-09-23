@@ -9,14 +9,14 @@ pub fn add(left: u64, right: u64) -> u64 {
 #[cfg(test)]
 mod test {
     use super::*;
-    // use crate::first::{List, Link};
+use std::fmt::Debug;
     use crate::second::{List, Link};
     
 
-    // #[test]
-    // fn testis (){
-    //     let mut list = List::new(&first::List{a: Link::Empty});
-    //     assert_eq!(list.pop(), None);
+    #[test]
+    fn peekt(){
+        // let mut list = List::new();
+        // assert_eq!(list.pop(), None);
 
     //     list.push(1);   
     //     list.push(2);   
@@ -25,12 +25,15 @@ mod test {
     //     assert_eq!(list.pop(), Some(2));
     //     assert_eq!(list.pop(), Some(1));
     //     assert_eq!(list.pop(), None);
-    //     }
+        }
 
 
     #[test]
-    fn tester (){
-        let mut list = List::new(&second::List{a: None});
+    #[derive(Debug, PartialEq)]
+    fn tester<T> ()
+    where T: Debug + PartialEq
+    {
+        let mut list: second::List<T> = List::new();
         assert_eq!(list.pop(), None);
 
         list.push(1);   
