@@ -107,18 +107,32 @@ impl<T> Drop for List<T> {
 
 pub struct IntoIter<T>(List<T>);
 
-
 impl<T> List<T> {
     pub fn into_iter(self) -> IntoIter<T> {
         IntoIter(self)
     }
 }
-
 impl<T> Iterator for IntoIter<T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
         // access fields of a tuple struct numerically
         self.0.pop()
+    }
+}
+
+#[cfg(test)]
+mod test {
+use super::List;
+#[test]
+    fn basics() {
+        let list = &mut List::new();
+                assert_eq!(list.pop(), None);
+        list.push(1);   
+        list.push(2);   
+        assert_eq!(list.pop(), Some(2));
+        assert_eq!(list.pop(), Some(1));
+        assert_eq!(list.pop(), None);
+        
     }
 }
 

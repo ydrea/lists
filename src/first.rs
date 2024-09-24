@@ -17,7 +17,7 @@ pub struct Node {
 ///create an empty List
 impl List {
     pub fn new(&self) -> Self { 
-        return List { a: Link::Empty };   
+         List { a: Link::Empty }   
     }
 ///push a node to List
     pub fn push(&mut self, elem: i32) {
