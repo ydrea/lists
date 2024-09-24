@@ -1,9 +1,8 @@
 pub mod second;
+use second::List;
 
 #[cfg(test)]
-mod test {
-    use lists::second::List;
-
+// mod test {
     #[test]
     fn basics() {
         let mut list = List::new();
@@ -18,5 +17,5 @@ mod test {
         assert_eq!(list.pop(), None);
         
     }
-}
+// }
 
