@@ -104,7 +104,7 @@ impl<T> Drop for List<T> {
     }
 }
 
-
+// IntoIter
 pub struct IntoIter<T>(List<T>);
 
 impl<T> List<T> {
@@ -119,6 +119,16 @@ impl<T> Iterator for IntoIter<T> {
         self.0.pop()
     }
 }
+
+// Iter
+pub struct Iter<'a, T> {
+    cdr: Option<&'a, Node<T>>
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item<&'a, T>
+} 
+
 
 #[cfg(test)]
 mod test {
