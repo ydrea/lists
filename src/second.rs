@@ -37,42 +37,43 @@ impl<T> List<T> {
         }
     }
 
-    // Peek at the value in the head node (if it exists)
-    pub fn peek_mut(&mut self) -> Option<&mut T> {
-        match self.a.as_mut() {
-            None => None,               // If the list is empty, return None
-            Some(val) => Some(&mut val.car), // If there is a node, return a mutable reference to `node.car`
-        }
+
+    pub fn pop(&mut self) -> Option<T> {
+        self.a.take() // Temporarily replace self.a with None
+            .map(|node| {
+                // If node exists, move to the next node (node.cdr) and return node.car
+                self.a = node.cdr;
+                node.car
+            })
     }
-/// Pops a node off the list and returns its value (if the list is not empty).
-///
-/// This method temporarily takes ownership of the head node (`self.a`) by using `take()`,
-/// which replaces the head of the list with `None`. Then, it uses `map` to either:
-/// - If the list is empty (`None`), it returns `None`.
-/// - If the list has a node (`Some`), it moves to the next node by assigning `self.a` to the `cdr` (the next node),
-///   and returns the value (`car`) stored in the popped node.
-///
-/// # Returns
-/// - `Some(T)` if the list had at least one node, with `T` being the value from the popped node.
-/// - `None` if the list was empty.
-///
-/// # Example
-/// ```
-/// let mut list = List::new();
-/// list.push(1);
-/// list.push(2);
-/// assert_eq!(list.pop(), Some(2));  // Pops the most recent element
-/// assert_eq!(list.pop(), Some(1));  // Pops the next element
-/// assert_eq!(list.pop(), None);     // List is now empty
-/// ```
-pub fn pop(&mut self) -> Option<T> {
-    self.a.take() // Temporarily replace self.a with None
-        .map(|node| {
-            // If node exists, move to the next node (node.cdr) and return node.car
-            self.a = node.cdr;
-            node.car
+    
+    // Peek at the value in the head node (if it exists)
+    // pub fn peek_mut(&mut self) -> Option<&mut T> {
+    //     match self.a.as_mut() {
+    //         None => None,               // If the list is empty, return None
+    //         Some(val) => Some(&mut val.car), // If there is a node, return a mutable reference to `node.car`
+    //     }
+    // }
+
+    pub fn peek_mut(&mut self) -> Option<&mut T> {
+        self.a.as_mut().map(|node| {
+            &mut node.car
         })
+    }
+
+    pub fn into_iter(self) -> IntoIter<T> {
+        IntoIter(self)
+    }
+
+    pub fn iter(&self) -> Iter<'_, T> {
+        Iter { cdr: self.a.as_deref() }
+    }
+
+    pub fn iter_mut(&mut self) -> IterMut<'_, T> {
+        IterMut { cdr: self.a.as_deref_mut() }
+    }
 }
+/// ```
 // //Option SomeT or None, to check for empty List
 //     pub fn pop(&mut self) -> Option<T> {
 //         //init result to be returned
@@ -89,8 +90,8 @@ pub fn pop(&mut self) -> Option<T> {
 //             },
 //         };
 //         result
-//     }
-}
+    
+
 impl<T> Drop for List<T> {
     fn drop(&mut self) {
         let mut drop_link = self.a.take();
@@ -107,11 +108,11 @@ impl<T> Drop for List<T> {
 // IntoIter
 pub struct IntoIter<T>(List<T>);
 
-impl<T> List<T> {
-    pub fn into_iter(self) -> IntoIter<T> {
-        IntoIter(self)
-    }
-}
+// impl<T> List<T> {
+//     pub fn into_iter(self) -> IntoIter<T> {
+//         IntoIter(self)
+//     }
+// }
 impl<T> Iterator for IntoIter<T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
@@ -122,12 +123,47 @@ impl<T> Iterator for IntoIter<T> {
 
 // Iter
 pub struct Iter<'a, T> {
-    cdr: Option<&'a, Node<T>>
+    cdr: Option<&'a Node<T>>,
 }
 
+// impl<T> List<T> {
+//     pub fn iter(&self) -> Iter<'_, T> {
+//         Iter { cdr: self.a.as_deref() }
+//     }
+// }
+
+
 impl<'a, T> Iterator for Iter<'a, T> {
-    type Item<&'a, T>
-} 
+    type Item = &'a T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.cdr.map(|node| {
+            self.cdr = node.cdr.as_deref();
+            &node.car
+        })
+    }
+}
+
+//IterMut
+// Iter
+pub struct IterMut<'a, T> {
+    cdr: Option<&'a mut Node<T>>,
+}
+
+// impl<T> List<T> {
+//     pub fn iter_mut(&mut self) -> IterMut<'_, T> {
+//         IterMut { cdr: self.a.as_deref() }
+//     }
+// }
+
+impl<'a, T> Iterator for IterMut<'a, T> {
+    type Item = &'a mut T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.cdr.take().map(|node| {
+            self.cdr = node.cdr.as_deref_mut();
+            &mut node.car
+        })
+    }
+}
 
 
 #[cfg(test)]
