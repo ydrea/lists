@@ -17,7 +17,8 @@ impl<T> List<T> {
     pub fn new() -> Self { 
         return List { a: None };   
     }
-//Associated fn - push a node to List
+
+    //Associated fn - push a node to List
     pub fn push(&mut self, car: T) {
  //make a new_node to be Box new(car, cdr: self.a)
         let new_node = Box::new(Node {
@@ -73,24 +74,7 @@ impl<T> List<T> {
         IterMut { cdr: self.a.as_deref_mut() }
     }
 }
-/// ```
-// //Option SomeT or None, to check for empty List
-//     pub fn pop(&mut self) -> Option<T> {
-//         //init result to be returned
-//         let result; 
-//         //mach on Option
-//         //+ replace, temporarily replacing self.a with None
-//         match self.a.take() {
-//             None => {
-//                 result = None;
-//             },
-//             Some(b) => {
-//                 result = Some(b.car);
-//                 self.a = b.cdr;
-//             },
-//         };
-//         result
-    
+   
 
 impl<T> Drop for List<T> {
     fn drop(&mut self) {
@@ -108,11 +92,6 @@ impl<T> Drop for List<T> {
 // IntoIter
 pub struct IntoIter<T>(List<T>);
 
-// impl<T> List<T> {
-//     pub fn into_iter(self) -> IntoIter<T> {
-//         IntoIter(self)
-//     }
-// }
 impl<T> Iterator for IntoIter<T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
@@ -126,13 +105,6 @@ pub struct Iter<'a, T> {
     cdr: Option<&'a Node<T>>,
 }
 
-// impl<T> List<T> {
-//     pub fn iter(&self) -> Iter<'_, T> {
-//         Iter { cdr: self.a.as_deref() }
-//     }
-// }
-
-
 impl<'a, T> Iterator for Iter<'a, T> {
     type Item = &'a T;
     fn next(&mut self) -> Option<Self::Item> {
@@ -144,16 +116,9 @@ impl<'a, T> Iterator for Iter<'a, T> {
 }
 
 //IterMut
-// Iter
 pub struct IterMut<'a, T> {
     cdr: Option<&'a mut Node<T>>,
 }
-
-// impl<T> List<T> {
-//     pub fn iter_mut(&mut self) -> IterMut<'_, T> {
-//         IterMut { cdr: self.a.as_deref() }
-//     }
-// }
 
 impl<'a, T> Iterator for IterMut<'a, T> {
     type Item = &'a mut T;
